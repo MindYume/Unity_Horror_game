@@ -32,10 +32,14 @@ public class Player : MonoBehaviour
         cam = GetComponentInChildren<Camera>();
     }
 
+    void Update()
+    {
+        HandleMovementControl();
+    }
 
     void FixedUpdate()
     {
-        HandleMovementControl();
+        // HandleMovementControl();
         HandleCameraControl();
     }
 
@@ -54,8 +58,8 @@ public class Player : MonoBehaviour
 
         if(moveDirection != Vector3.zero)
         {
-            hVelocity.x += moveDirection.x * acceleration * Time.fixedDeltaTime;
-            hVelocity.y += moveDirection.z * acceleration * Time.fixedDeltaTime;
+            hVelocity.x += moveDirection.x * acceleration * Time.deltaTime;
+            hVelocity.y += moveDirection.z * acceleration * Time.deltaTime;
 
             if(hVelocity.magnitude > standartVelocity)
                 hVelocity = hVelocity.normalized*standartVelocity;
@@ -64,7 +68,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            hVelocity = Vector2.MoveTowards(hVelocity, Vector2.zero, friction * Time.fixedDeltaTime);
+            hVelocity = Vector2.MoveTowards(hVelocity, Vector2.zero, friction * Time.deltaTime);
         }
 
         rb.velocity = new Vector3(hVelocity.x, rb.velocity.y, hVelocity.y);
@@ -77,6 +81,5 @@ public class Player : MonoBehaviour
         _cameraLookDirection.x = Mathf.Clamp(_cameraLookDirection.x, -90f, 90f);
 
         cam.transform.localRotation = Quaternion.Euler(_cameraLookDirection.x, _cameraLookDirection.y, 0);
-        //transform.rotation = Quaternion.Euler(0, _cameraLookDirection.y, 0);
     }
 }
